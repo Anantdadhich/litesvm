@@ -3,7 +3,7 @@ use anchor_spl::{associated_token::AssociatedToken, token_interface::{Mint, Toke
 
 use crate::state::escrow::Escrow;
 
-#[deriv(Accounts)]
+#[derive(Accounts)]
 #[instruction(seed:u64)]
 pub struct Make <'info> {
     #[account(mut)]
@@ -16,7 +16,7 @@ pub struct Make <'info> {
         init,
         payer=maker,
         space=8+Escrow::INIT_SPACE,
-        seeds=[b"escrow",maker.key().as_ref(),seed.to_le_bytes.as_ref()],
+        seeds=[b"escrow",maker.key().as_ref(),seed.to_le_bytes().as_ref()],
         bump
     )]
     pub escrow:Account<'info,Escrow>,
@@ -35,7 +35,7 @@ pub struct Make <'info> {
     )]
     pub maker_ata_a:InterfaceAccount<'info,TokenAccount>,
 
-    pub assoaciated_token_program:Program<'info,AssociatedToken>,
+    pub associated_token_program:Program<'info,AssociatedToken>,
 
     pub token_program:Interface<'info,TokenInterface>,
 

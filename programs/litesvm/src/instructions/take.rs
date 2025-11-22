@@ -1,5 +1,5 @@
 use anchor_lang::prelude::*;
-use anchor_spl::{associated_token::AssociatedToken, token::close_account, token_interface::{Mint, TokenAccount, TokenInterface, TransferChecked, transfer_checked}};
+use anchor_spl::{associated_token::AssociatedToken, token::{CloseAccount, close_account}, token_interface::{Mint, TokenAccount, TokenInterface, TransferChecked, transfer_checked}};
 
 use crate::state::escrow::Escrow;
 
@@ -96,12 +96,11 @@ impl <'info> Take <'info> {
         };
         
      
-        let signer_seeds:[&[&[&u8]];1]=[&[
+           let signer_seeds: [&[&[u8]]; 1] = [&[
             b"escrow",
-            self.maker.key().as_ref(),
-            &self.escrow.seed.to_be_bytes()[..],
+            self.maker.key.as_ref(),
+            &self.escrow.seed.to_le_bytes()[..],
             &[self.escrow.bump]
-
         ]];
 
         let cpi_context=CpiContext::new_with_signer(cpi_programs, cpi_accounts, &signer_seeds);
